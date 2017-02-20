@@ -14,6 +14,7 @@ class DataHandler(object):
         self.X_2quatrains = []
         self.X_volta = []
         self.X_couplet = []
+        self.rhymes = []
 
         self.read_data()
         print len(self.X_2quatrains)
@@ -25,6 +26,7 @@ class DataHandler(object):
         file = open(self.data_file, 'r')
         sonnetCount = 1
         lineCount = -1
+        lastWords = []
 
         for line in file:
             if line == '\n':
@@ -38,7 +40,7 @@ class DataHandler(object):
             if lineCount > 0:
                 sequence = line.strip().lower().split(' ')
                 sequence = list(reversed(self.remove_punctuation(sequence)))
-
+                lastWords.append(sequence[0])
                 if lineCount >= 1 and lineCount <= 8:
                     self.X_2quatrains.append(sequence)
                 elif lineCount >= 9 and lineCount <= 12:
@@ -49,6 +51,14 @@ class DataHandler(object):
                 lineCount += 1
                 if lineCount > self.n_lines:
                     lineCount = -1
+                    self.rhymes.append([lastWords[0],lastWords[2]])
+                    self.rhymes.append([lastWords[1], lastWords[3]])
+                    self.rhymes.append([lastWords[4], lastWords[6]])
+                    self.rhymes.append([lastWords[5], lastWords[7]])
+                    self.rhymes.append([lastWords[8], lastWords[10]])
+                    self.rhymes.append([lastWords[9], lastWords[11]])
+                    self.rhymes.append([lastWords[12], lastWords[13]])
+                    lastWords = []
         
 
     def remove_punctuation(self,sequence):
