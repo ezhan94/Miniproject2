@@ -16,7 +16,7 @@ class DataHandler(object):
         self.X_couplet = [] # final length = 306
         self.rhymes = []
 
-        self.read_data(rhymes = True)
+        self.read_data(save_rhymes = True)
 
     def read_data(self, save_rhymes = False):
         file = open(self.data_file, 'r')
@@ -63,7 +63,6 @@ class DataHandler(object):
                         lastWords = []
                         tmp_rhymes = []
                         added = False
-                        print(self.rhymes)
                         for pair in rhymes:
                             for group in self.rhymes:
                                 if(added == False):
@@ -71,7 +70,6 @@ class DataHandler(object):
                                         tmp_rhymes.append(group)
                                     else:
                                         tmp_rhymes.append(pair | group)
-                                        print(pair | group)
                                         added = True
                                 else:
                                     tmp_rhymes.append(group)
@@ -89,7 +87,7 @@ class DataHandler(object):
         return (self.X_2quatrains, self.X_volta, self.X_couplet)
 
     def get_rhymes(self):
-        self.read_data(save_rhymes = True)
+        #self.read_data(save_rhymes = True)
         return (self.rhymes)
 
     def remove_punctuation(self,sequence):

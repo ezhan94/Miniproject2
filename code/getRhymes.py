@@ -8,8 +8,6 @@ list_of_rhymes = []
 for sets in rhymes:
     list_of_rhymes.append(list(sets))
 
-print rhymes
-
 with open("rhymes.csv","w") as f:
     wr = csv.writer(f)
     wr.writerows(list_of_rhymes)
