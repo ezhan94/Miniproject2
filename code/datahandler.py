@@ -18,12 +18,13 @@ class DataHandler(object):
 
         self.read_data()
 
-    def read_data(self):
+    def read_data(self, save_rhymes = False):
         file = open(self.data_file, 'r')
         sonnetCount = 1
         lineCount = -1
-        lastWords = []
-        rhymes = []
+        if save_rhymes:
+            lastWords = []
+            rhymes = []
 
         for line in file:
             if line == '\n':
@@ -37,7 +38,8 @@ class DataHandler(object):
             if lineCount > 0:
                 sequence = line.strip().lower().split(' ')
                 sequence = list(reversed(self.remove_punctuation(sequence)))
-                lastWords.append(sequence[0])
+                if save_rhymes:
+                    lastWords.append(sequence[0])
                 if lineCount >= 1 and lineCount <= 8:
                     self.X_2quatrains.append(sequence)
                 elif lineCount >= 9 and lineCount <= 12:
@@ -48,27 +50,32 @@ class DataHandler(object):
                 lineCount += 1
                 if lineCount > self.n_lines:
                     lineCount = -1
-                    # rhymes.append({lastWords[0],lastWords[2]})
-                    # rhymes.append({lastWords[1], lastWords[3]})
-                    # rhymes.append({lastWords[4], lastWords[6]})
-                    # rhymes.append({lastWords[5], lastWords[7]})
-                    # rhymes.append({lastWords[8], lastWords[10]})
-                    # rhymes.append({lastWords[9], lastWords[11]})
-                    # rhymes.append({lastWords[12], lastWords[13]})
-                    # for pair in rhymes:
-                    #     if len(self.rhymes) >0 :
-                    #         for set in self.rhymes:
-                    #             if len(pair & set) is not 0:
-                    #                 set = pair & set
-                    #             else:
-                    #                 self.rhymes.append(pair)
-                    #     else:
-                    #         self.rhymes.append(pair)
+                    if save_rhymes:
+                        rhymes.append({lastWords[0],lastWords[2]})
+                        rhymes.append({lastWords[1], lastWords[3]})
+                        rhymes.append({lastWords[4], lastWords[6]})
+                        rhymes.append({lastWords[5], lastWords[7]})
+                        rhymes.append({lastWords[8], lastWords[10]})
+                        rhymes.append({lastWords[9], lastWords[11]})
+                        rhymes.append({lastWords[12], lastWords[13]})
+                        for pair in rhymes:
+                            if len(self.rhymes) >0 :
+                                for set in self.rhymes:
+                                    if len(pair & set) is not 0:
+                                        set = pair & set
+                                    else:
+                                        self.rhymes.append(pair)
+                            else:
+                                self.rhymes.append(pair)
 
-                    # lastWords = []
+                        lastWords = []
         
     def get_data(self):
         return (self.X_2quatrains, self.X_volta, self.X_couplet)
+
+    def get_rhymes(self):
+        self.read_data(save_rhymes = True)
+        return (self.rhymes)
 
     def remove_punctuation(self,sequence):
         for i in range(len(sequence)):
