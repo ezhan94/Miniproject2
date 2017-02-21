@@ -66,9 +66,6 @@ class DataHandler(object):
                         rhymes.append({lastWords_quatrain[1], lastWords_quatrain[3]})
                         rhymes.append({lastWords_quatrain[4], lastWords_quatrain[6]})
                         rhymes.append({lastWords_quatrain[5], lastWords_quatrain[7]})
-                        rhymes.append({lastWords_quatrain[8], lastWords_quatrain[10]})
-                        rhymes.append({lastWords_quatrain[9], lastWords_quatrain[11]})
-                        rhymes.append({lastWords_quatrain[12], lastWords_quatrain[13]})
                         lastWords_quatrain = []
                         tmp_rhymes = []
                         added = False
@@ -90,11 +87,6 @@ class DataHandler(object):
                         rhymes = []
                         rhymes.append({lastWords_volta[0],lastWords_volta[2]})
                         rhymes.append({lastWords_volta[1], lastWords_volta[3]})
-                        rhymes.append({lastWords_volta[4], lastWords_volta[6]})
-                        rhymes.append({lastWords_volta[5], lastWords_volta[7]})
-                        rhymes.append({lastWords_volta[8], lastWords_volta[10]})
-                        rhymes.append({lastWords_volta[9], lastWords_volta[11]})
-                        rhymes.append({lastWords_volta[12], lastWords_volta[13]})
                         lastWords_volta = []
                         tmp_rhymes = []
                         added = False
@@ -114,13 +106,7 @@ class DataHandler(object):
                             self.rhymes_volta = tmp_rhymes
                             tmp_rhymes = []
                         rhymes = []
-                        rhymes.append({lastWords_couplet[0], lastWords_couplet[2]})
-                        rhymes.append({lastWords_couplet[1], lastWords_couplet[3]})
-                        rhymes.append({lastWords_couplet[4], lastWords_couplet[6]})
-                        rhymes.append({lastWords_couplet[5], lastWords_couplet[7]})
-                        rhymes.append({lastWords_couplet[8], lastWords_couplet[10]})
-                        rhymes.append({lastWords_couplet[9], lastWords_couplet[11]})
-                        rhymes.append({lastWords_couplet[12], lastWords_couplet[13]})
+                        rhymes.append({lastWords_couplet[0], lastWords_couplet[1]})
                         lastWords_couplet = []
                         tmp_rhymes = []
                         added = False
