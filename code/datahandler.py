@@ -25,7 +25,7 @@ class DataHandler(object):
         sonnetCount = 1
         lineCount = -1
         if save_rhymes:
-            lastWords_quatrain = []
+            lastWords_2quatrains = []
             lastWords_volta = []
             lastWords_couplet = []
             rhymes = []
