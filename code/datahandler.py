@@ -59,16 +59,27 @@ class DataHandler(object):
                         rhymes.append({lastWords[9], lastWords[11]})
                         rhymes.append({lastWords[12], lastWords[13]})
                         for pair in rhymes:
-                            if len(self.rhymes) >0 :
-                                for set in self.rhymes:
-                                    if len(pair & set) is not 0:
-                                        set = pair & set
-                                    else:
-                                        self.rhymes.append(pair)
-                            else:
-                                self.rhymes.append(pair)
+                            self.rhymes.append(pair)
+                        rhymes = []
+                        # tmp_rhymes = []
+                        # for pair in rhymes:
+                        #     print(pair)
+                        #     if len(self.rhymes) > 0:
+                        #         for sets in self.rhymes:
+                        #             intersection = pair & sets
+                        #             if len(intersection) == 0:
+                        #                 tmp_rhymes.append(pair)
+                        #             else:
+                        #                 tmp_rhymes.append(intersection)
+                        #                 #print(sets)
+                        #     else:
+                        #         tmp_rhymes.append(pair)
+                        # self.rhymes = tmp_rhymes
+                        # tmp_rhymes = []
+                        # rhymes = []
+                        # lastWords = []
 
-                        lastWords = []
+
         
     def get_data(self):
         return (self.X_2quatrains, self.X_volta, self.X_couplet)

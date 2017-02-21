@@ -4,11 +4,13 @@ import  csv
 
 dh = DataHandler()
 rhymes = dh.get_rhymes()
+list_of_rhymes = []
+for sets in rhymes:
+    list_of_rhymes.append(list(sets))
 
-for set in rhymes:
-    set = list(set)
+print rhymes
 
 with open("rhymes.csv","w") as f:
     wr = csv.writer(f)
-    wr.writerows(rhymes)
+    wr.writerows(list_of_rhymes)
 
