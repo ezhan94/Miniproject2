@@ -14,7 +14,9 @@ class DataHandler(object):
         self.X_2quatrains = [] # final length = 1224
         self.X_volta = [] # final length = 612
         self.X_couplet = [] # final length = 306
-        self.rhymes = []
+        self.rhymes_2quatrains = []
+        self.rhymes_volta = []
+        self.rhymes_couplet = []
 
         self.read_data(save_rhymes = True)
 
@@ -23,7 +25,9 @@ class DataHandler(object):
         sonnetCount = 1
         lineCount = -1
         if save_rhymes:
-            lastWords = []
+            lastWords_quatrain = []
+            lastWords_volta = []
+            lastWords_couplet = []
             rhymes = []
 
 
@@ -39,32 +43,37 @@ class DataHandler(object):
             if lineCount > 0:
                 sequence = line.strip().lower().split(' ')
                 sequence = list(reversed(self.remove_punctuation(sequence)))
-                if save_rhymes:
-                    lastWords.append(sequence[0])
+
                 if lineCount >= 1 and lineCount <= 8:
                     self.X_2quatrains.append(sequence)
+                    if save_rhymes:
+                        lastWords_2quatrains.append(sequence[0])
                 elif lineCount >= 9 and lineCount <= 12:
                     self.X_volta.append(sequence)
+                    if save_rhymes:
+                        lastWords_volta.append(sequence[0])
                 else:
                     self.X_couplet.append(sequence)
+                    if save_rhymes:
+                        lastWords_couplet.append(sequence[0])
 
                 lineCount += 1
                 if lineCount > self.n_lines:
                     lineCount = -1
                     if save_rhymes:
                         rhymes = []
-                        rhymes.append({lastWords[0],lastWords[2]})
-                        rhymes.append({lastWords[1], lastWords[3]})
-                        rhymes.append({lastWords[4], lastWords[6]})
-                        rhymes.append({lastWords[5], lastWords[7]})
-                        rhymes.append({lastWords[8], lastWords[10]})
-                        rhymes.append({lastWords[9], lastWords[11]})
-                        rhymes.append({lastWords[12], lastWords[13]})
-                        lastWords = []
+                        rhymes.append({lastWords_quatrain[0],lastWords_quatrain[2]})
+                        rhymes.append({lastWords_quatrain[1], lastWords_quatrain[3]})
+                        rhymes.append({lastWords_quatrain[4], lastWords_quatrain[6]})
+                        rhymes.append({lastWords_quatrain[5], lastWords_quatrain[7]})
+                        rhymes.append({lastWords_quatrain[8], lastWords_quatrain[10]})
+                        rhymes.append({lastWords_quatrain[9], lastWords_quatrain[11]})
+                        rhymes.append({lastWords_quatrain[12], lastWords_quatrain[13]})
+                        lastWords_quatrain = []
                         tmp_rhymes = []
                         added = False
                         for pair in rhymes:
-                            for group in self.rhymes:
+                            for group in self.rhymes_2quatrains:
                                 if(added == False):
                                     if len(pair & group) == 0:
                                         tmp_rhymes.append(group)
@@ -76,11 +85,60 @@ class DataHandler(object):
                             if(added == False):
                                 tmp_rhymes.append(pair)
                             added = False
-                            self.rhymes = tmp_rhymes
+                            self.rhymes_2quatrains = tmp_rhymes
                             tmp_rhymes = []
-
-
-
+                        rhymes = []
+                        rhymes.append({lastWords_volta[0],lastWords_volta[2]})
+                        rhymes.append({lastWords_volta[1], lastWords_volta[3]})
+                        rhymes.append({lastWords_volta[4], lastWords_volta[6]})
+                        rhymes.append({lastWords_volta[5], lastWords_volta[7]})
+                        rhymes.append({lastWords_volta[8], lastWords_volta[10]})
+                        rhymes.append({lastWords_volta[9], lastWords_volta[11]})
+                        rhymes.append({lastWords_volta[12], lastWords_volta[13]})
+                        lastWords_volta = []
+                        tmp_rhymes = []
+                        added = False
+                        for pair in rhymes:
+                            for group in self.rhymes_volta:
+                                if(added == False):
+                                    if len(pair & group) == 0:
+                                        tmp_rhymes.append(group)
+                                    else:
+                                        tmp_rhymes.append(pair | group)
+                                        added = True
+                                else:
+                                    tmp_rhymes.append(group)
+                            if(added == False):
+                                tmp_rhymes.append(pair)
+                            added = False
+                            self.rhymes_volta = tmp_rhymes
+                            tmp_rhymes = []
+                        rhymes = []
+                        rhymes.append({lastWords_couplet[0], lastWords_couplet[2]})
+                        rhymes.append({lastWords_couplet[1], lastWords_couplet[3]})
+                        rhymes.append({lastWords_couplet[4], lastWords_couplet[6]})
+                        rhymes.append({lastWords_couplet[5], lastWords_couplet[7]})
+                        rhymes.append({lastWords_couplet[8], lastWords_couplet[10]})
+                        rhymes.append({lastWords_couplet[9], lastWords_couplet[11]})
+                        rhymes.append({lastWords_couplet[12], lastWords_couplet[13]})
+                        lastWords_couplet = []
+                        tmp_rhymes = []
+                        added = False
+                        for pair in rhymes:
+                            for group in self.rhymes_couplet:
+                                if (added == False):
+                                    if len(pair & group) == 0:
+                                        tmp_rhymes.append(group)
+                                    else:
+                                        tmp_rhymes.append(pair | group)
+                                        added = True
+                                else:
+                                    tmp_rhymes.append(group)
+                            if (added == False):
+                                tmp_rhymes.append(pair)
+                            added = False
+                            self.rhymes_couplet = tmp_rhymes
+                            tmp_rhymes = []
 
         
     def get_data(self):
@@ -88,7 +146,7 @@ class DataHandler(object):
 
     def get_rhymes(self):
         #self.read_data(save_rhymes = True)
-        return (self.rhymes)
+        return (self.rhymes_2quatrains,self.rhymes_volta,self.rhymes_couplet)
 
     def remove_punctuation(self,sequence):
         for i in range(len(sequence)):
