@@ -25,7 +25,7 @@ class DataHandler(object):
         sonnetCount = 1
         lineCount = -1
         if save_rhymes:
-            lastWords_2quatrains = []
+            lastWords_quatrain = []
             lastWords_volta = []
             lastWords_couplet = []
             rhymes = []
@@ -47,7 +47,7 @@ class DataHandler(object):
                 if lineCount >= 1 and lineCount <= 8:
                     self.X_2quatrains.append(sequence)
                     if save_rhymes:
-                        lastWords_2quatrains.append(sequence[0])
+                        lastWords_quatrain.append(sequence[0])
                 elif lineCount >= 9 and lineCount <= 12:
                     self.X_volta.append(sequence)
                     if save_rhymes:
