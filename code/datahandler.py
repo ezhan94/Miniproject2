@@ -16,7 +16,7 @@ class DataHandler(object):
         self.X_couplet = [] # final length = 306
         self.rhymes = []
 
-        self.read_data()
+        self.read_data(rhymes = True)
 
     def read_data(self, save_rhymes = False):
         file = open(self.data_file, 'r')
@@ -25,6 +25,7 @@ class DataHandler(object):
         if save_rhymes:
             lastWords = []
             rhymes = []
+
 
         for line in file:
             if line == '\n':
@@ -51,6 +52,7 @@ class DataHandler(object):
                 if lineCount > self.n_lines:
                     lineCount = -1
                     if save_rhymes:
+                        rhymes = []
                         rhymes.append({lastWords[0],lastWords[2]})
                         rhymes.append({lastWords[1], lastWords[3]})
                         rhymes.append({lastWords[4], lastWords[6]})
@@ -58,26 +60,28 @@ class DataHandler(object):
                         rhymes.append({lastWords[8], lastWords[10]})
                         rhymes.append({lastWords[9], lastWords[11]})
                         rhymes.append({lastWords[12], lastWords[13]})
+                        lastWords = []
+                        tmp_rhymes = []
+                        added = False
+                        print(self.rhymes)
                         for pair in rhymes:
-                            self.rhymes.append(pair)
-                        rhymes = []
-                        # tmp_rhymes = []
-                        # for pair in rhymes:
-                        #     print(pair)
-                        #     if len(self.rhymes) > 0:
-                        #         for sets in self.rhymes:
-                        #             intersection = pair & sets
-                        #             if len(intersection) == 0:
-                        #                 tmp_rhymes.append(pair)
-                        #             else:
-                        #                 tmp_rhymes.append(intersection)
-                        #                 #print(sets)
-                        #     else:
-                        #         tmp_rhymes.append(pair)
-                        # self.rhymes = tmp_rhymes
-                        # tmp_rhymes = []
-                        # rhymes = []
-                        # lastWords = []
+                            for group in self.rhymes:
+                                if(added == False):
+                                    if len(pair & group) == 0:
+                                        tmp_rhymes.append(group)
+                                    else:
+                                        tmp_rhymes.append(pair | group)
+                                        print(pair | group)
+                                        added = True
+                                else:
+                                    tmp_rhymes.append(group)
+                            if(added == False):
+                                tmp_rhymes.append(pair)
+                            added = False
+                            self.rhymes = tmp_rhymes
+                            tmp_rhymes = []
+
+
 
 
         
