@@ -18,9 +18,9 @@ class DataHandler(object):
         self.rhymes_volta = []
         self.rhymes_couplet = []
 
-        self.read_data(save_rhymes = True)
+        self.read_data(save_rhymes=True)
 
-    def read_data(self, save_rhymes = False):
+    def read_data(self, save_rhymes=False):
         file = open(self.data_file, 'r')
         sonnetCount = 1
         lineCount = -1
@@ -137,9 +137,9 @@ class DataHandler(object):
     def remove_punctuation(self,sequence):
         for i in range(len(sequence)):
             word = sequence[i]
-            if word[-1] in ['?', ',', '.', '!', ':', ';', ')']:
+            if word[-1] in ['?', ',', '.', '!', ':', ';', ')', "'"]:
                 sequence[i] = sequence[i][:-1]
-            if word[0] in ['(']:
+            if word[0] in ['(', "'"]:
                 sequence[i] = sequence[i][1:]
         return sequence
 

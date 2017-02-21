@@ -296,9 +296,9 @@ class HiddenMarkovModel:
         ### TODO: Insert Your Code Here (2H)
         ###
 
-        numIterations = 100
+        numIterations = 10
         for iteration in range(numIterations):
-            print iteration
+            # print iteration
 
             A_Probs = [[0. for _ in range(self.L)] for _ in range(self.L)]
             O_Probs = [[0. for _ in range(self.D)] for _ in range(self.L)]

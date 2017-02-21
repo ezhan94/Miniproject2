@@ -7,19 +7,19 @@ X_2quatrains,X_volta,X_couplet = dh.get_data()
 rhymes_q,rhymes_v,rhymes_c = dh.get_rhymes()
 rhy = []
 num_groups = len(rhymes_q)
-for i in range(8):
+for i in range(4):
     group = random.randrange(num_groups)
     rhyme_pair = random.sample(rhymes_q[group], 2)
     rhy.append(rhyme_pair[0])
     rhy.append(rhyme_pair[1])
 num_groups = len(rhymes_v)
-for i in range(4):
+for i in range(2):
     group = random.randrange(num_groups)
     rhyme_pair = random.sample(rhymes_v[group], 2)
     rhy.append(rhyme_pair[0])
     rhy.append(rhyme_pair[1])
 num_groups = len(rhymes_c)
-for i in range(2):
+for i in range(1):
     group = random.randrange(num_groups)
     rhyme_pair = random.sample(rhymes_c[group], 2)
     rhy.append(rhyme_pair[0])
