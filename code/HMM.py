@@ -296,67 +296,41 @@ class HiddenMarkovModel:
         ### TODO: Insert Your Code Here (2H)
         ###
 
-        import time
-
-        numIterations = 1
+        numIterations = 100
         for iteration in range(numIterations):
             print iteration
 
-            stateProbsList = []
-            transitionProbsList = []
-
-            # E-step
-
-            start_time = time.time()
+            A_Probs = [[0. for _ in range(self.L)] for _ in range(self.L)]
+            O_Probs = [[0. for _ in range(self.D)] for _ in range(self.L)]
 
             for x in X:
                 M = len(x)
+                stateProbs = [[0. for _ in range(self.L)] for _ in range(M + 1)]
+                transitionProbs = [[[0. for _ in range(self.L)] for _ in range(self.L)] for _ in range(M)]
                 alphas = self.forward(x,normalize=True)
                 betas = self.backward(x,normalize=True)
 
-                stateProbs = [[0. for _ in range(self.L)] for _ in range(M + 1)]
                 for t in range(1,M+1):
                     denom = sum([alphas[t][state]*betas[t][state] for state in range(self.L)])
                     stateProbs[t] = [alphas[t][state]*betas[t][state]/denom for state in range(self.L)]
-                stateProbsList.append(stateProbs)
 
-                transitionProbs = [[[0. for _ in range(self.L)] for _ in range(self.L)] for _ in range(M)]
                 for t in range(1,M):
-                    toSum = [[alphas[t][curr]*self.O[nex][x[t]]*self.A[curr][nex]*betas[t+1][nex] for nex in range(self.L)] for curr in range(self.L)]
+                    toSum = [[alphas[t][cur]*self.O[nxt][x[t]]*self.A[cur][nxt]*betas[t+1][nxt] for nxt in range(self.L)] for cur in range(self.L)]
                     denom = sum(map(sum,toSum))
-                    transitionProbs[t] = [[alphas[t][curr]*self.O[nex][x[t]]*self.A[curr][nex]*betas[t+1][nex]/denom for nex in range(self.L)] for curr in range(self.L)]
-                transitionProbsList.append(transitionProbs)
+                    transitionProbs[t] = [[alphas[t][cur]*self.O[nxt][x[t]]*self.A[cur][nxt]*betas[t+1][nxt]/denom for nxt in range(self.L)] for cur in range(self.L)]
 
-            # M-step
+                for t in range(1,M+1):
+                    for cur in range(self.L):
+                        for nxt in range(self.L):
+                            A_Probs[cur][nxt] += transitionProbs[t-1][cur][nxt]
+                    for cur in range(self.L):
+                        O_Probs[cur][x[t-1]] += stateProbs[t][cur]
 
-            print time.time()-start_time
-            start_time = time.time()
-
-            for curr in range(self.L):
-                for nex in range(self.L):
-                    numer = 0.0
-                    denom = 0.0
-                    for i in range(len(X)):
-                        stateProbs = stateProbsList[i]
-                        transitionProbs = transitionProbsList[i]
-                        for t in range(1,len(transitionProbs)):
-                            numer += transitionProbs[t][curr][nex]
-                            denom += stateProbs[t][curr]
-                    self.A[curr][nex] = numer/denom
-
-            for curr in range(self.L):
-                for obs in range(self.D):
-                    numer = 0.0
-                    denom = 0.0
-                    for i in range(len(X)):
-                        stateProbs = stateProbsList[i]
-                        for t in range(1,len(stateProbs)):
-                            denom += stateProbs[t][curr]
-                            if X[i][t-1] == obs:
-                                numer += stateProbs[t][curr]
-                    self.O[curr][obs] = numer/denom
-
-            print time.time()-start_time
+            for i in range(self.L):
+                A_norm = sum(A_Probs[i])
+                O_norm = sum(O_Probs[i])
+                self.A[i] = [p/A_norm for p in A_Probs[i]]
+                self.O[i] = [p/O_norm for p in O_Probs[i]]
 
         pass
 
@@ -498,7 +472,7 @@ def unsupervised_HMM(X, n_states):
     L = n_states
     D = len(observations)
 
-    random.seed(5)
+    random.seed(7)
 
     # Randomly initialize and normalize matrix A.
     A = [[random.random() for i in range(L)] for j in range(L)]
