@@ -35,6 +35,8 @@
 # To get started, just fill in code where indicated. Best of luck!
 
 import random
+import numpy
+import operator
 
 class HiddenMarkovModel:
     '''
@@ -110,8 +112,6 @@ class HiddenMarkovModel:
         ### 
         ### TODO: Insert Your Code Here (2E)
         ###
-
-        import operator
 
         for j in range(self.L):
             probs[1][j] = self.A_start[j]*self.O[j][x[0]]
@@ -296,6 +296,8 @@ class HiddenMarkovModel:
         ### TODO: Insert Your Code Here (2H)
         ###
 
+        import time
+
         numIterations = 1
         for iteration in range(numIterations):
             print iteration
@@ -304,6 +306,8 @@ class HiddenMarkovModel:
             transitionProbsList = []
 
             # E-step
+
+            start_time = time.time()
 
             for x in X:
                 M = len(x)
@@ -324,6 +328,9 @@ class HiddenMarkovModel:
                 transitionProbsList.append(transitionProbs)
 
             # M-step
+
+            print time.time()-start_time
+            start_time = time.time()
 
             for curr in range(self.L):
                 for nex in range(self.L):
@@ -349,18 +356,17 @@ class HiddenMarkovModel:
                                 numer += stateProbs[t][curr]
                     self.O[curr][obs] = numer/denom
 
+            print time.time()-start_time
+
         pass
 
 
-    def generate_emission(self, start, M):
-        import numpy
-        emission = []
+    def generate_emission(self, lastObs, M):
+        emission = [lastObs]
+        currState, _ = max(enumerate([self.O[state][lastObs] for state in range(self.L)]), key=operator.itemgetter(1))
 
-        for t in range(M):
-            if t > 0:
-                currState = numpy.random.choice(range(self.L), p=self.A[currState])
-            else:
-                currState = start
+        for t in range(1,M):
+            currState = numpy.random.choice(range(self.L), p=self.A[currState])
             emission.append(numpy.random.choice(range(self.D), p=self.O[currState]))
 
         return emission
