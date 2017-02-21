@@ -296,10 +296,9 @@ class HiddenMarkovModel:
         ### TODO: Insert Your Code Here (2H)
         ###
 
-        numIterations = 1000
+        numIterations = 1
         for iteration in range(numIterations):
-            # if iteration % 10 == 0:
-            #     print iteration
+            print iteration
 
             stateProbsList = []
             transitionProbsList = []
@@ -353,36 +352,18 @@ class HiddenMarkovModel:
         pass
 
 
-    def generate_emission(self, M):
-        '''
-        Generates an emission of length M, assuming that the starting state
-        is chosen uniformly at random. 
-
-        Arguments:
-            M:          Length of the emission to generate.
-
-        Returns:
-            emission:   The randomly generated emission as a string.
-        '''
-
-        emission = ''
-
-        ###
-        ### TODO: Insert Your Code Here (2J)
-        ###
-
+    def generate_emission(self, start, M):
         import numpy
-        currState = -1
+        emission = []
 
         for t in range(M):
             if t > 0:
                 currState = numpy.random.choice(range(self.L), p=self.A[currState])
             else:
-                currState = numpy.random.choice(range(self.L), p=self.A_start)
-            emission += str(numpy.random.choice(range(self.D), p=self.O[currState]))
+                currState = start
+            emission.append(numpy.random.choice(range(self.D), p=self.O[currState]))
 
         return emission
-
 
     def probability_alphas(self, x):
         '''

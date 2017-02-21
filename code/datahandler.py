@@ -11,16 +11,12 @@ class DataHandler(object):
         self.n_sonnets = 153 # removed sonnet 126
         self.n_lines = 14
         self.data_file = 'data/shakespeare.txt'
-        self.X_2quatrains = []
-        self.X_volta = []
-        self.X_couplet = []
+        self.X_2quatrains = [] # final length = 1224
+        self.X_volta = [] # final length = 612
+        self.X_couplet = [] # final length = 306
         self.rhymes = []
 
         self.read_data()
-        print len(self.X_2quatrains)
-        print len(self.X_volta)
-        print len(self.X_couplet)
-
 
     def read_data(self):
         file = open(self.data_file, 'r')
@@ -52,26 +48,27 @@ class DataHandler(object):
                 lineCount += 1
                 if lineCount > self.n_lines:
                     lineCount = -1
-                    rhymes.append({lastWords[0],lastWords[2]})
-                    rhymes.append({lastWords[1], lastWords[3]})
-                    rhymes.append({lastWords[4], lastWords[6]})
-                    rhymes.append({lastWords[5], lastWords[7]})
-                    rhymes.append({lastWords[8], lastWords[10]})
-                    rhymes.append({lastWords[9], lastWords[11]})
-                    rhymes.append({lastWords[12], lastWords[13]})
-                    for pair in rhymes:
-                        if len(self.rhymes) >0 :
-                            for set in self.rhymes:
-                                if len(pair & set) is not 0:
-                                    set = pair & set
-                                else:
-                                    self.rhymes.append(pair)
-                        else:
-                            self.rhymes.append(pair)
+                    # rhymes.append({lastWords[0],lastWords[2]})
+                    # rhymes.append({lastWords[1], lastWords[3]})
+                    # rhymes.append({lastWords[4], lastWords[6]})
+                    # rhymes.append({lastWords[5], lastWords[7]})
+                    # rhymes.append({lastWords[8], lastWords[10]})
+                    # rhymes.append({lastWords[9], lastWords[11]})
+                    # rhymes.append({lastWords[12], lastWords[13]})
+                    # for pair in rhymes:
+                    #     if len(self.rhymes) >0 :
+                    #         for set in self.rhymes:
+                    #             if len(pair & set) is not 0:
+                    #                 set = pair & set
+                    #             else:
+                    #                 self.rhymes.append(pair)
+                    #     else:
+                    #         self.rhymes.append(pair)
 
-                    lastWords = []
-
-
+                    # lastWords = []
+        
+    def get_data(self):
+        return (self.X_2quatrains, self.X_volta, self.X_couplet)
 
     def remove_punctuation(self,sequence):
         for i in range(len(sequence)):
@@ -81,4 +78,27 @@ class DataHandler(object):
             if word[0] in ['(']:
                 sequence[i] = sequence[i][1:]
         return sequence
+
+    def quantify_observations(self,X):
+        obsList = []
+        newX = []
+
+        for x in X:
+            sequence = []
+            for word in x:
+                if word in obsList:
+                    sequence.append(obsList.index(word))
+                else:
+                    obsList.append(word)
+                    sequence.append(len(obsList)-1)
+            newX.append(sequence)
+
+        return (newX,obsList)
+
+    def convert_to_sentence(self,emission,obsList):
+        sentence = ''
+        for w in reversed(emission):
+            sentence += obsList[w]
+            sentence += ' '
+        return sentence[:-1]
 
