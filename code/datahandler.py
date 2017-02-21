@@ -27,6 +27,7 @@ class DataHandler(object):
         sonnetCount = 1
         lineCount = -1
         lastWords = []
+        rhymes = []
 
         for line in file:
             if line == '\n':
@@ -51,15 +52,26 @@ class DataHandler(object):
                 lineCount += 1
                 if lineCount > self.n_lines:
                     lineCount = -1
-                    self.rhymes.append([lastWords[0],lastWords[2]])
-                    self.rhymes.append([lastWords[1], lastWords[3]])
-                    self.rhymes.append([lastWords[4], lastWords[6]])
-                    self.rhymes.append([lastWords[5], lastWords[7]])
-                    self.rhymes.append([lastWords[8], lastWords[10]])
-                    self.rhymes.append([lastWords[9], lastWords[11]])
-                    self.rhymes.append([lastWords[12], lastWords[13]])
+                    rhymes.append({lastWords[0],lastWords[2]})
+                    rhymes.append({lastWords[1], lastWords[3]})
+                    rhymes.append({lastWords[4], lastWords[6]})
+                    rhymes.append({lastWords[5], lastWords[7]})
+                    rhymes.append({lastWords[8], lastWords[10]})
+                    rhymes.append({lastWords[9], lastWords[11]})
+                    rhymes.append({lastWords[12], lastWords[13]})
+                    for pair in rhymes:
+                        if len(self.rhymes) >0 :
+                            for set in self.rhymes:
+                                if len(pair & set) is not 0:
+                                    set = pair & set
+                                else:
+                                    self.rhymes.append(pair)
+                        else:
+                            self.rhymes.append(pair)
+
                     lastWords = []
-        
+
+
 
     def remove_punctuation(self,sequence):
         for i in range(len(sequence)):
