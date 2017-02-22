@@ -38,6 +38,8 @@ class DataHandler(object):
                 sonnetCount += 1
                 if sonnetCount == 126:
                     sonnetCount = 127
+                elif sonnetCount == 99:
+                    sonnetCount = 100
                 lineCount = 1
                 continue
             if lineCount > 0:
