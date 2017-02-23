@@ -17,7 +17,6 @@ class NltkHandler(object):
         
         
     def numSyll_isEmph(self,word):
-        
         words = word.split('-')
         if len(words)>1:
             combinedInfo = []

@@ -25,6 +25,7 @@ rhymes[VERSES[0]],rhymes[VERSES[1]],rhymes[VERSES[2]] = dh.get_rhymes()
 rhy = []
 for verse in VERSES:
     num_groups = len(rhymes[verse])
+
     for i in range(VERSE_LENGTH[verse]/2):
         group = random.randrange(num_groups)
         rhyme_pair = random.sample(rhymes[verse][group], 2)
