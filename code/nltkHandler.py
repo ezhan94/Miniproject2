@@ -17,6 +17,7 @@ class NltkHandler(object):
     def numSyll_isEmph(self,word):
         
         if not self.cmuDict.has_key(word):
+            print(word)
             return (1, 1)
         
         numSyll = [len(list(y for y in x if y[-1].isdigit())) for x in self.cmuDict[word.lower()]][0]
