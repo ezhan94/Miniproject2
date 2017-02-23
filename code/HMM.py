@@ -322,6 +322,17 @@ class HiddenMarkovModel:
                     self.O[curr][xt] = O_num[curr][xt] / O_den[curr]
 
 
+    def generate_emission(self, lastObs, M):
+        emission = [lastObs]
+        currState, _ = max(enumerate([self.O[state][lastObs] for state in range(self.L)]), key=operator.itemgetter(1))
+
+        for t in range(1,M):
+            currState = numpy.random.choice(range(self.L), p=self.A[currState])
+            emission.append(numpy.random.choice(range(self.D), p=self.O[currState]))
+
+        return emission
+
+
     def generate_new_emission(self, lastObs, obsList, syllDict):
         emission = [lastObs]
         currState, _ = max(enumerate([self.O[state][lastObs] for state in range(self.L)]), key=operator.itemgetter(1))
