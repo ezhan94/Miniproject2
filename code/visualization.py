@@ -1,6 +1,9 @@
 from datahandler import DataHandler
 from HMM import unsupervised_HMM
 import pickle
+import networkx as nx
+import matplotlib.pyplot as plt
+import pylab
 
 VERSES = ['2quatrain', 'volta', 'couplet']
 READ_FOLDER = 'modelsToLoad/'
@@ -16,19 +19,38 @@ for verse in VERSES:
 		continue
 
 	X_processed,X_conversion = dh.quantify_observations(X[verse])
-	#HMM = pickle.load(open(READ_FOLDER+'300/HMM_'+verse+'.p', 'rb'))
+	#HMM = pickle.load(open(READ_FOLDER+'600/HMM_'+verse+'.p', 'rb'))
 	HMM = pickle.load(open(READ_FOLDER+'HMM_'+verse+'.p', 'rb'))
 
-	# # transition probabilities
-	# for state in range(HMM.L):
-	# 	print state
-	# 	print ['%.2f' % prob for prob in HMM.A[state]]
+	G = nx.DiGraph()
 
+	for state in range(HMM.L):
 
-	# top words for each state
+	# 	for nxt in range(HMM.L):
+	# 		if HMM.A[state][nxt] > 0:
+	# 			weight = '%.2f' % HMM.A[state][nxt]
+	# 			G.add_edge(state,nxt,weight=weight)
+	# print G.number_of_edges()
+	# edge_labels=dict([((u,v,),d['weight']) for u,v,d in G.edges(data=True)])
+	# pos=nx.spring_layout(G)
+	# nx.draw_networkx_edge_labels(G,pos,edge_labels=edge_labels)
+	# nx.draw_networkx_labels(G,pos)
+	# nx.draw(G,pos,node_size=1500)
+	# pylab.show()
+
+		print state
+		truncatedProbs = filter(lambda a: a > 0.0, HMM.A[state])
+		print ['%.4f' % prob for prob in truncatedProbs]
+		# print ['%.2f' % prob for prob in HMM.A[state]]
+		# print filter(lambda a: a > 0.0, truncatedProbs)
+
 	for state in range(HMM.L):
 		probs = HMM.O[state]
 		ranking = sorted(range(len(probs)), key=lambda i: probs[i], reverse=True)[:topN]
 		print('STATE: ' + str(state))
 		for i in range(topN):
-			print(X_conversion[ranking[i]] + '\t%.5f' % probs[ranking[i]])
+			print(X_conversion[ranking[i]] + '\t%.8f' % probs[ranking[i]])
+
+
+
+

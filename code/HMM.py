@@ -10,8 +10,7 @@ class HiddenMarkovModel:
         self.A = A
         self.O = O
         self.A_start = [1. / self.L for _ in range(self.L)]
-        self.iterations = 700
-
+        self.iterations = 100
 
     def forward(self, x, normalize=False):
         M = len(x)      # Length of sequence.

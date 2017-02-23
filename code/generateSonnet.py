@@ -9,7 +9,8 @@ VERSE_LENGTH = {'2quatrain' : 8, 'volta': 4, 'couplet': 2}
 READ_FOLDER = 'modelsToLoad/'
 WRITE_FOLDER = 'modelsSaved/'
 
-trainHMM = False
+trainHMM = True
+nStates = 10
 
 ######################################################################
 ############################### MAIN #################################
@@ -41,7 +42,7 @@ for verse in VERSES:
     syllDict = nh.getDict(X_conversion)
 
     if trainHMM:
-        HMM = unsupervised_HMM(X_processed,30)
+        HMM = unsupervised_HMM(X_processed,nStates)
         pickle.dump(HMM, open(WRITE_FOLDER+'HMM_'+verse+'.p', 'wb'))
     else:
         HMM = pickle.load(open(READ_FOLDER+'HMM_'+verse+'.p', 'rb'))
