@@ -155,4 +155,9 @@ class NltkHandler(object):
                 if self.cmuDict.has_key(ww):
                     w = ww
         
+        #add extra syll for ed:
+        if word[-2:]=='ed':
+            changedSylls+=1
+            changedEmph = True
+        
         return (w, changedSylls, changedEmph)
