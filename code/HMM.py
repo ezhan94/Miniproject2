@@ -337,21 +337,29 @@ class HiddenMarkovModel:
         emission = [lastObs]
         currState, _ = max(enumerate([self.O[state][lastObs] for state in range(self.L)]), key=operator.itemgetter(1))
         syllCount = 0
+        currWord = obsList[lastObs]
+        numSyll, currEmph = syllDict[currWord]
+        syllCount += numSyll
         emph = True
-
+        if currEmph and syllCount % 2 is 0:
+            emph = False
+        elif not currEmph and syllCount % 2 is not 0:
+            emph = False
         while syllCount < 10:
+            currState = numpy.random.choice(range(self.L), p=self.A[currState])
+            probs = self.generate_emission_probs(10-syllCount, emph, currState, obsList, syllDict)
+            lastObs = numpy.random.choice(range(self.D), p=probs)
+            emission.append(lastObs)
             currWord = obsList[lastObs]
             numSyll, currEmph = syllDict[currWord]
+            if numSyll == 1:
+                currEmph = not emph
             syllCount += numSyll
             emph = True
             if currEmph and syllCount % 2 is 0:
                 emph = False
             elif not currEmph and syllCount % 2 is not 0:
                 emph = False
-            currState = numpy.random.choice(range(self.L), p=self.A[currState])
-            probs = self.generate_emission_probs(10-syllCount, emph, currState, obsList, syllDict)
-            lastObs = numpy.random.choice(range(self.D), p=probs)
-            emission.append(lastObs)
 
         return emission
 
