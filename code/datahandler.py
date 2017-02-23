@@ -8,7 +8,7 @@ import numpy as np
 class DataHandler(object):
 
     def __init__(self):
-        self.n_sonnets = 153 # removed sonnet 126
+        self.n_sonnets = 152 # removed sonnets 99 and 126
         self.n_lines = 14
         self.data_file = 'data/shakespeare.txt'
         self.X_2quatrains = [] # final length = 1224
