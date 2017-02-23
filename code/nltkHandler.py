@@ -33,7 +33,7 @@ class NltkHandler(object):
         #w = word.lower()
         
         if not self.cmuDict.has_key(w):
-            print (word, w)
+            #print (word, w)
             numSyll = int(math.ceil(len(w)/self.estWordLength))
             return (numSyll, 1)
         

@@ -187,7 +187,7 @@ class HiddenMarkovModel:
             emph = False
         while syllCount < 10:
             currState = numpy.random.choice(range(self.L), p=self.A[currState])
-            probs = self.generate_emission_probs(10-syllCount, emph, currState, obsList, syllDict)
+            probs = self.generate_emission_probs(10-syllCount, emph, currState, obsList, syllDict,lastObs)
             lastObs = numpy.random.choice(range(self.D), p=probs)
             emission.append(lastObs)
             currWord = obsList[lastObs]
@@ -204,8 +204,9 @@ class HiddenMarkovModel:
         return emission
 
 
-    def generate_emission_probs(self, num_syllables, prev_emph, curr_state, obsList, syllDict):
+    def generate_emission_probs(self, num_syllables, prev_emph, curr_state, obsList, syllDict,curr_obs):
         probs = [i for i in self.O[curr_state]]
+        probs[curr_obs] = 0
         for state in range(len(probs)):
             word = obsList[state]
             syll_count, emph_level = syllDict[word]
