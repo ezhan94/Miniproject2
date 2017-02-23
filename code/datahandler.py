@@ -161,12 +161,30 @@ class DataHandler(object):
 
         return (newX,obsList)
 
-    def convert_to_sentence(self,emission,obsList):
+    def convert_to_sentence(self,emission,obsList,new_sentence): #TODO: need to add punctuation, capitalize first letter of a new sentance, who etc. add ?
         sentence = ''
+        first_word = True
+        question = False
         for w in reversed(emission):
-            sentence += obsList[w]
+            word = obsList[w]
+            if new_sentence and word in ['who','what','where','why','how']:
+                    question = True
+            if first_word:
+                word = word[0].upper() + word[1:]
+                first_word = False
+            if word == 'i':
+                word = 'I'
+            sentence += word
             sentence += ' '
-        return sentence[:-1]
+        sentence = sentence[:-1]
+        if new_sentence:
+            sentence += ','
+        else:
+            if question:
+                sentence += '.'
+            else:
+                sentence += '.'
+        return sentence
 
 
 

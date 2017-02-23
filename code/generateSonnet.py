@@ -46,8 +46,10 @@ for verse in VERSES:
     else:
         HMM = pickle.load(open(READ_FOLDER+'HMM_'+verse+'.p', 'rb'))
 
+    count = 0
     for word in seeds[verse]:
+        count += 1
         seed_num = X_conversion.index(word)
         emission = HMM.generate_new_emission(seed_num, X_conversion, syllDict)
-        print dh.convert_to_sentence(emission,X_conversion)
+        print dh.convert_to_sentence(emission,X_conversion, count % 2)
 
