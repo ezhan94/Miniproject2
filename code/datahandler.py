@@ -167,9 +167,9 @@ class DataHandler(object):
         question = False
         for w in reversed(emission):
             word = obsList[w]
-            if first_word and new_sentence:
-                if word in ['who','what','where','why','how']:
+            if new_sentence and word in ['who','what','where','why','how']:
                     question = True
+            if first_word:
                 word = word[0].upper() + word[1:]
                 first_word = False
             if word == 'i':
