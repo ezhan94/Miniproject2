@@ -322,15 +322,42 @@ class HiddenMarkovModel:
                     self.O[curr][xt] = O_num[curr][xt] / O_den[curr]
 
 
-    def generate_emission(self, lastObs, M):
+    def generate_new_emission(self, lastObs, obsList, syllDict):
         emission = [lastObs]
         currState, _ = max(enumerate([self.O[state][lastObs] for state in range(self.L)]), key=operator.itemgetter(1))
+        syllCount = 0
+        emph = True
 
-        for t in range(1,M):
+        while syllCount < 10:
+            currWord = obsList[lastObs]
+            numSyll, currEmph = syllDict[currWord]
+            syllCount += numSyll
+            emph = True
+            if currEmph and syllCount % 2 is 0:
+                emph = False
+            elif not currEmph and syllCount % 2 is not 0:
+                emph = False
             currState = numpy.random.choice(range(self.L), p=self.A[currState])
-            emission.append(numpy.random.choice(range(self.D), p=self.O[currState]))
+            probs = self.generate_emission_probs(10-syllCount, emph, currState, obsList, syllDict)
+            lastObs = numpy.random.choice(range(self.D), p=probs)
+            emission.append(lastObs)
 
         return emission
+
+    def generate_emission_probs(self, num_syllables, prev_emph, curr_state, obsList, syllDict):
+        probs = [i for i in self.O[curr_state]]
+        for state in range(len(probs)):
+            word = obsList[state]
+            syll_count, emph_level = syllDict[word]
+            emph = False
+            if emph_level > 0:
+                emph = True
+            if syll_count > num_syllables:
+                probs[state] = 0
+            elif (emph == prev_emph) & (num_syllables is not 1):
+                probs[state] = 0
+        probs = [probs[i]/sum(probs) for i in range(len(probs))]
+        return probs
 
 
     # # This is HW5 solutions' answer, for reference

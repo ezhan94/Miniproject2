@@ -39,7 +39,7 @@ HMM = pickle.load( open( readFolder+'HMM_2quatrain.p', 'rb' ) )
 #pickle.dump( HMM, open( writeFolder+'HMM_2quatrain.p', 'wb' ) )
 for word in quatrain_seeds:
     seed_num = X_conversion.index(word)
-    emission = HMM.generate_emission(seed_num,8)
+    emission = HMM.generate_emission(seed_num,8,X_conversion)
     print dh.convert_to_sentence(emission,X_conversion)
 
 X_processed,X_conversion = dh.quantify_observations(X_volta)
@@ -48,7 +48,7 @@ HMM = pickle.load( open( readFolder+'HMM_volta.p', 'rb' ) )
 #pickle.dump( HMM, open( writeFolder+'HMM_volta.p', 'wb' ) )
 for word in volta_seeds:
     seed_num = X_conversion.index(word)
-    emission = HMM.generate_emission(seed_num,8)
+    emission = HMM.generate_emission(seed_num,8,X_conversion)
     print dh.convert_to_sentence(emission,X_conversion)
 
 X_processed,X_conversion = dh.quantify_observations(X_couplet)
@@ -57,5 +57,5 @@ HMM = pickle.load( open( readFolder+'HMM_couplet.p', 'rb' ) )
 #pickle.dump( HMM, open( writeFolder+'HMM_couplet.p', 'wb' ) )
 for word in couplet_seeds:
     seed_num = X_conversion.index(word)
-    emission = HMM.generate_emission(seed_num,8)
+    emission = HMM.generate_emission(seed_num,8,X_conversion)
     print dh.convert_to_sentence(emission,X_conversion)
