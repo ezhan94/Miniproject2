@@ -29,7 +29,8 @@ class NltkHandler(object):
             
             return (numSyll, isEmph)
         
-        (w, changed) = self.cleanWord(word)
+        (w, changedSylls) = self.cleanWord(word)
+        #w = word.lower()
         
         if not self.cmuDict.has_key(w):
             print (word, w)
@@ -45,28 +46,66 @@ class NltkHandler(object):
             isEmph = int(lastSyl[-1])
             
             
-        #check orig for 'ed' or 'eth' or 'ly'
-        #if (that's in the original word) and changed:
-            #isEmph=0
-            #numSyll +=1
+        #check orig for 'ed' or 'eth' or 'ly' (actually, jk, the flag will tell you)
+        if changedSylls:
+            isEmph=0
+            numSyll +=1
         
         return (numSyll, isEmph) 
     
     def cleanWord(self,word):
         
-        changed = False
+        changedSylls = False
         
         w = word.lower()
         
         #' at end: remove
-        #'s, 't: remove 
+        w = w.strip('\'')
+        
         #'st: remove, test in dict, else add e, test, if not, give up
+        if '\'st' in w:
+            if self.cmuDict.has_key(w.replace('\'st','')):
+                w = w.replace('\'st','')
+            elif self.cmuDict.has_key(w.replace('\'st','')+'e'):
+                w = w.replace('\'st','')+'e'
+        
+        #'s, 't: remove 
+        if '\'s' in w:
+            w = w.replace('\'s','')
+        if '\'t' in w:
+            w = w.replace('\'t','')
         
         #ed, eth: test in dict; if not remove, test in dict, else add e, test
+        if 'ed' in w and not self.cmuDict.has_key(w):
+            if self.cmuDict.has_key(w.replace('ed','')):
+                w = w.replace('ed','')
+                changedSylls = True
+            elif self.cmuDict.has_key(w.replace('ed','')+'e'):
+                w = w.replace('ed','')+'e'
+                changedSylls = True
+        if 'eth' in w and not self.cmuDict.has_key(w):
+            if self.cmuDict.has_key(w.replace('eth','')):
+                w = w.replace('eth','')
+                changedSylls = True
+            elif self.cmuDict.has_key(w.replace('eth','')+'e'):
+                w = w.replace('eth','')+'e'
+                changedSylls = True
         
-        #ou: test in dict, if not, swap with o, test in dict
         
         #ly: test in dict, if not remove, test in dict
+        if 'ly' in w and not self.cmuDict.has_key(w):
+            if self.cmuDict.has_key(w.replace('ly','')):
+                w = w.replace('ly','')
+                changedSylls = True
         
+        #ou: test in dict, if not, swap with o, test in dict
+        if 'ou' in w:
+            if self.cmuDict.has_key(w.replace('ou','o')):
+                w = w.replace('ou','o')
+            else:
+                ww = self.cleanWord(w.replace('ou','o'))
+                if self.cmuDict.has_key(ww):
+                    w = ww
+                
         
-        return (w, changed)
+        return (w, changedSylls)
