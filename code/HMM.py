@@ -179,18 +179,24 @@ class HiddenMarkovModel:
         currWord = obsList[lastObs]
         numSyll, currEmph = syllDict[currWord]
         syllCount += numSyll
+        sylls_in_line = 10
+        if currEmph == 0:
+            sylls_in_line = 11
         emph = True
         if currEmph and syllCount % 2 is 0:
             emph = False
         elif not currEmph and syllCount % 2 is not 0:
             emph = False
-        while syllCount < 10:
+        while syllCount < sylls_in_line:
             currState = numpy.random.choice(range(self.L), p=self.A[currState])
-            probs = self.generate_emission_probs(10-syllCount, emph, currState, obsList, syllDict,lastObs)
+            probs = self.generate_emission_probs(sylls_in_line-syllCount, emph, currState, obsList, syllDict,lastObs)
             lastObs = numpy.random.choice(range(self.D), p=probs)
             emission.append(lastObs)
             currWord = obsList[lastObs]
             numSyll, currEmph = syllDict[currWord]
+            sylls_in_line = 10
+            if currEmph == 0:
+                sylls_in_line = 11
             if numSyll == 1:
                 currEmph = not emph
             syllCount += numSyll

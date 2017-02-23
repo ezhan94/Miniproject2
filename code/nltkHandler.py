@@ -17,7 +17,6 @@ class NltkHandler(object):
         
         
     def numSyll_isEmph(self,word):
-        
         words = word.split('-')
         if len(words)>1:
             combinedInfo = []
@@ -93,7 +92,7 @@ class NltkHandler(object):
                 changedSylls = -1
         
         #ed, eth, er: test in dict; if not remove, test in dict, else add e, test
-        if 'ed' in w and not self.cmuDict.has_key(w):
+        if word[-2:]=='ed':#'ed' in w: # and not self.cmuDict.has_key(w):
             if self.cmuDict.has_key(w.replace('ed','')):
                 w = w.replace('ed','')
                 changedSylls = 1
@@ -156,8 +155,8 @@ class NltkHandler(object):
                     w = ww
         
         #add extra syll for ed:
-        if word[-2:]=='ed':
-            changedSylls+=1
-            changedEmph = True
+        #if word[-2:]=='ed' and not self.cmuDict.has_key(word):
+        #    changedSylls+=1
+        #    changedEmph = True
         
         return (w, changedSylls, changedEmph)

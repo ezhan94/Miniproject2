@@ -4,7 +4,7 @@
 # reads/writes/handles Shakespeare sonnets
 
 import numpy as np
-
+from nltkHandler import NltkHandler
 class DataHandler(object):
 
     def __init__(self):
@@ -24,6 +24,7 @@ class DataHandler(object):
         file = open(self.data_file, 'r')
         sonnetCount = 1
         lineCount = -1
+        nh = NltkHandler()
         if save_rhymes:
             lastWords_quatrain = []
             lastWords_volta = []
@@ -68,10 +69,14 @@ class DataHandler(object):
                         rhymes.append({lastWords_quatrain[1], lastWords_quatrain[3]})
                         rhymes.append({lastWords_quatrain[4], lastWords_quatrain[6]})
                         rhymes.append({lastWords_quatrain[5], lastWords_quatrain[7]})
+                        # rhyme_dict = nh.getDict(lastWords_quatrain)
                         lastWords_quatrain = []
                         tmp_rhymes = []
                         added = False
                         for pair in rhymes:
+                            # pair_list = list(pair)
+                            # if rhyme_dict[pair_list[0]][1] == 0 and rhyme_dict[pair_list[1]][1] == 0:
+                            #     continue
                             for group in self.rhymes_2quatrains:
                                 if(added == False):
                                     if len(pair & group) == 0:
@@ -89,10 +94,14 @@ class DataHandler(object):
                         rhymes = []
                         rhymes.append({lastWords_volta[0],lastWords_volta[2]})
                         rhymes.append({lastWords_volta[1], lastWords_volta[3]})
+                        # rhyme_dict = nh.getDict(lastWords_volta)
                         lastWords_volta = []
                         tmp_rhymes = []
                         added = False
                         for pair in rhymes:
+                            # pair_list = list(pair)
+                            # if rhyme_dict[pair_list[0]][1] == 0 and rhyme_dict[pair_list[1]][1] == 0:
+                            #     continue
                             for group in self.rhymes_volta:
                                 if(added == False):
                                     if len(pair & group) == 0:
@@ -109,10 +118,14 @@ class DataHandler(object):
                             tmp_rhymes = []
                         rhymes = []
                         rhymes.append({lastWords_couplet[0], lastWords_couplet[1]})
+                        # rhyme_dict = nh.getDict(lastWords_couplet)
                         lastWords_couplet = []
                         tmp_rhymes = []
                         added = False
                         for pair in rhymes:
+                            # pair_list = list(pair)
+                            # if rhyme_dict[pair_list[0]][1] == 0 and rhyme_dict[pair_list[1]][1] == 0:
+                            #     continue
                             for group in self.rhymes_couplet:
                                 if (added == False):
                                     if len(pair & group) == 0:
