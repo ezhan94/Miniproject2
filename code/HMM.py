@@ -195,6 +195,9 @@ class HiddenMarkovModel:
             emission.append(lastObs)
             currWord = obsList[lastObs]
             numSyll, currEmph = syllDict[currWord]
+            sylls_in_line = 10
+            if currEmph == 0:
+                sylls_in_line = 11
             if numSyll == 1:
                 currEmph = not emph
             syllCount += numSyll
