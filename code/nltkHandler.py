@@ -58,6 +58,7 @@ class NltkHandler(object):
         
         w = word.lower()
         
+        #' at end: remove
         #'s, 't: remove 
         #'st: remove, test in dict, else add e, test, if not, give up
         

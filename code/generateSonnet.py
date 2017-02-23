@@ -1,4 +1,5 @@
 from datahandler import DataHandler
+from nltkHandler import NltkHandler
 from HMM import unsupervised_HMM
 import random
 import pickle
@@ -15,6 +16,7 @@ trainHMM = False
 ######################################################################
 
 dh = DataHandler()
+nh = NltkHandler()
 X = {}
 X[VERSES[0]],X[VERSES[1]],X[VERSES[2]] = dh.get_data()
 rhymes = {}
@@ -36,6 +38,7 @@ seeds[VERSES[2]] = [rhy[12],rhy[13]] # couplet seeds
 
 for verse in VERSES:
     X_processed,X_conversion = dh.quantify_observations(X[verse])
+    syllDict = nh.getDict(X_conversion)
 
     if trainHMM:
         HMM = unsupervised_HMM(X_processed,30)
@@ -45,6 +48,6 @@ for verse in VERSES:
 
     for word in seeds[verse]:
         seed_num = X_conversion.index(word)
-        emission = HMM.generate_emission(seed_num,8)
+        emission = HMM.generate_new_emission(seed_num, X_conversion, syllDict)
         print dh.convert_to_sentence(emission,X_conversion)
 
