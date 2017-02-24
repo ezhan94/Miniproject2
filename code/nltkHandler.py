@@ -7,6 +7,7 @@ class NltkHandler(object):
     def __init__(self):
         self.cmuDict = cmudict.dict()
         self.estWordLength = 4.0
+        self.numMiss = 0
 
     def getDict(self, wordList):
         infodict = {}
@@ -33,6 +34,7 @@ class NltkHandler(object):
         
         if not self.cmuDict.has_key(w):
             #print (word, w)
+            self.numMiss +=1
             numSyll = int(math.ceil(len(w)/self.estWordLength))
             return (numSyll, 1)
         
