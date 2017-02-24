@@ -9,7 +9,7 @@ VERSE_LENGTH = {'2quatrain' : 8, 'volta': 4, 'couplet': 2}
 READ_FOLDER = 'modelsToLoad/'
 WRITE_FOLDER = 'modelsSaved/'
 
-trainHMM = True
+trainHMM = False
 nStates = 10
 
 ######################################################################
@@ -42,6 +42,7 @@ for verse in VERSES:
     X_processed,X_conversion = dh.quantify_observations(X[verse])
     syllDict = nh.getDict(X_conversion)
 
+    print(nh.numMiss)
     if trainHMM:
         HMM = unsupervised_HMM(X_processed,nStates)
         pickle.dump(HMM, open(WRITE_FOLDER+'HMM_'+verse+'.p', 'wb'))
@@ -54,4 +55,5 @@ for verse in VERSES:
         seed_num = X_conversion.index(word)
         emission = HMM.generate_new_emission(seed_num, X_conversion, syllDict)
         print dh.convert_to_sentence(emission,X_conversion, count % 2)
+
 
