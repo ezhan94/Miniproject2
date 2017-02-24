@@ -29,10 +29,10 @@ class NltkHandler(object):
             
             return (numSyll, isEmph)
         
-        #(w, changedSylls, changedEmph) = self.cleanWord(word)
-        w = word.lower()
-        changedSylls = 0
-        changedEmph = False
+        (w, changedSylls, changedEmph) = self.cleanWord(word)
+        #w = word.lower()
+        #changedSylls = 0
+        #changedEmph = False
 
         if not self.cmuDict.has_key(w):
             #print (word, w)
