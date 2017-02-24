@@ -15,11 +15,11 @@ X[VERSES[0]],X[VERSES[1]],X[VERSES[2]] = dh.get_data()
 
 topN = 10
 for verse in VERSES:
-	if verse is not 'couplet':
+	if verse is not '2quatrain':
 		continue
 
 	X_processed,X_conversion = dh.quantify_observations(X[verse])
-	#HMM = pickle.load(open(READ_FOLDER+'600/HMM_'+verse+'.p', 'rb'))
+	#HMM = pickle.load(open(READ_FOLDER+'600_30states/HMM_'+verse+'.p', 'rb'))
 	HMM = pickle.load(open(READ_FOLDER+'HMM_'+verse+'.p', 'rb'))
 
 	G = nx.DiGraph()
@@ -27,7 +27,7 @@ for verse in VERSES:
 	for state in range(HMM.L):
 
 	# 	for nxt in range(HMM.L):
-	# 		if HMM.A[state][nxt] > 0:
+	# 		if HMM.A[state][nxt] > 0.1:
 	# 			weight = '%.2f' % HMM.A[state][nxt]
 	# 			G.add_edge(state,nxt,weight=weight)
 	# print G.number_of_edges()
@@ -40,8 +40,8 @@ for verse in VERSES:
 
 		print state
 		truncatedProbs = filter(lambda a: a > 0.0, HMM.A[state])
-		print ['%.4f' % prob for prob in truncatedProbs]
-		# print ['%.2f' % prob for prob in HMM.A[state]]
+		#print ['%.4f' % prob for prob in truncatedProbs]
+		print ['%.2f' % prob for prob in HMM.A[state]]
 		# print filter(lambda a: a > 0.0, truncatedProbs)
 
 	for state in range(HMM.L):
@@ -49,7 +49,9 @@ for verse in VERSES:
 		ranking = sorted(range(len(probs)), key=lambda i: probs[i], reverse=True)[:topN]
 		print('STATE: ' + str(state))
 		for i in range(topN):
-			print(X_conversion[ranking[i]] + '\t%.8f' % probs[ranking[i]])
+			output = X_conversion[ranking[i]]
+			output += ' ' * (12-len(output))
+			print(output + '%.6f' % probs[ranking[i]])
 
 
 
